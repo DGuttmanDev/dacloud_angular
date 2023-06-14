@@ -1,0 +1,34 @@
+<div class="container" *ngIf="autenticado">
+  <div class="row d-flex justify-content-between mt-5 mb-5">
+    <div class="col-md-6">
+      <h1>Mi unidad</h1>
+    </div>
+    <div class="col-md-6" id="subir-container">
+      <input id="fileInput" type="file" multiple (change)="onFileSelected($event)">
+      <label for="fileInput" class="custom-file-label">Subir archivo</label>
+    </div>
+  </div>
+  <button class="mb-4 mt-5 btn btn-outline-primary" (click)="inicio()">Ir a inicio</button>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="grid-container">
+        <div class="grid-item" *ngFor="let file of files">
+          <div class="file-preview" (click)="handleFileClick(file)">
+            <img [src]="getIconImage(file)">
+            <div id="container-span-options">
+              <span class="filename">{{ file.nombreArchivo }}</span>
+              <div class="dropdown">
+                <button class="dropbtn"><img src="https://i.stack.imgur.com/qiyab.png" alt="Acciones"></button>
+                <div class="dropdown-content">
+                  <a *ngIf="!file.folder">Descargar</a>
+                  <a (click)="renameFile(file)">Renombrar</a>
+                  <a (click)="deleteFile(file)">Borrar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,161 @@
+.container {
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -15px; /* Ajusta el margen negativo según sea necesario */
+
+    .col-md-12 {
+      width: 75%;
+      padding: 15px; /* Ajusta el padding según sea necesario */
+    }
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 225px); /* Mostrar 4 columnas en la cuadrícula */
+    gap: 15px; /* Ajusta el espacio entre los elementos según sea necesario */
+  }
+
+  .grid-item {
+    width: 100%;
+    height: 165px;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 1px;
+    border-color: lightgray;
+    padding: 15px; /* Ajusta el padding según sea necesario */
+  }
+
+  .file-preview {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    #container-span-options{
+      display: flex;
+      flex-direction: row;
+      span{
+        padding-top: 5px;
+      }
+    }
+
+    img {
+      width: 80px; /* Ajusta el tamaño del ícono según sea necesario */
+      height: 80px; /* Ajusta el tamaño del ícono según sea necesario */
+      margin-bottom: 10px; /* Ajusta el margen inferior según sea necesario */
+    }
+
+    span {
+      font-size: 14px; /* Ajusta el tamaño de la fuente según sea necesario */
+      font-weight: bold; /* Ajusta el peso de la fuente según sea necesario */
+    }
+
+    .dropdown {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 10px; /* Ajusta el margen izquierdo según sea necesario */
+    }
+
+    .dropbtn {
+      background-color: white;
+      color: white;
+      padding: 8px;
+      font-size: 12px;
+      border: none;
+    }
+
+    .dropbtn img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+}
+
+.filename {
+  display: inline-block;
+  max-width: 150px; /* Ajusta el ancho máximo según tus necesidades */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* Dropdown Button */
+.dropbtn {
+  background-color: white;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 130px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 8px 14px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: white;}
+
+#subir-container{
+  width: 150px;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  #boton-subir{
+    width: 150px;
+  }
+}
+
+.custom-file-label {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+.custom-file-label:hover {
+  background-color: #e8e8e8;
+}
+
+.custom-file-label:active {
+  background-color: #d9d9d9;
+}
+
+input[type="file"] {
+  display: none;
+}
