@@ -1,14 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
   <div class="container">
-    <a class="navbar-brand text h1 m-5 mb-0 mt-0" href="">DaCloud</a>
-    <a class="navbar-brand text m-5 mb-0 mt-0 font-weight-light" href="/user">Mi perfil</a>
+    <a class="navbar-brand text h1 m-5 mb-0 mt-0 logo" href="">DaCloud</a>
+    <a class="navbar-brand text m-5 mb-0 mt-0 subelementos" href="/user" *ngIf="autenticado">Mi perfil</a>
+    <a class="navbar-brand text m-5 mb-0 mt-0 font-weight-light" href="/home" *ngIf="autenticado">Mi unidad</a>
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
       <ul class="navbar-nav">
         <li class="nav-item">
           <button *ngIf="!autenticado" routerLink="/login" type="button" class="btn btn-primary">Iniciar sesión</button>
         </li>
         <li class="nav-item" *ngIf="autenticado">
-          <button routerLink="/home" type="button" class="btn btn-success m-2">Ir a mi unidad</button>
           <button (click)="logout()" type="button" class="btn btn-danger m-2">Cerrar sesión</button>
         </li>
       </ul>

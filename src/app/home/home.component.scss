@@ -128,7 +128,10 @@
 .dropdown:hover .dropbtn {background-color: white;}
 
 #subir-container{
-  width: 150px;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  width: 500px;
 }
 
 form{
@@ -158,4 +161,19 @@ form{
 
 input[type="file"] {
   display: none;
+}
+
+.subir-boton{
+  text-align: center;
+  width: 150px;
+  input{
+    width: 150px;
+  }
+  label{
+    width: 150px;
+  }
+}
+
+.crear-carpeta{
+  width: 150px;
 }

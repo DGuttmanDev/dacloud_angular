@@ -11,6 +11,7 @@ export class HomeComponent implements OnInit {
   files: ArchivoDTO[] = [];
   selectedFiles: File[] = [];
   autenticado: boolean = false;
+  idDirectorioPadre: number = 0;
 
   constructor(private http: HttpClient, public authService: AuthService) {
     const cookies = document.cookie.split(';');
@@ -43,6 +44,47 @@ export class HomeComponent implements OnInit {
       );
   }
 
+  descargarArchivo(file: any) {
+    const token = this.getCookie('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'token': token
+    });
+
+    this.http.get<DescargaDTO>('http://localhost:8080/api/file/download/mobile?id=' + file.idArchivo, {
+      headers: headers
+    }).subscribe(response => {
+      this.saveBase64File(response.base64Bytes, response.nombre);
+    }, error => {
+      console.error('Error al descargar el archivo:', error);
+    });
+  }
+
+  saveBase64File(base64String: string, fileName: string) {
+    const byteCharacters = atob(base64String);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+
+    const blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+    this.saveFile(blob, fileName);
+  }
+
+  saveFile(data: Blob, fileName: string) {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style.display = 'none';
+    const url = window.URL.createObjectURL(data);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  }
+
   ngOnInit(): void {
     const token = this.getCookie('token');
     const dirId = 0; // Cambia esto según el directorio del que deseas obtener las vistas previas
@@ -72,7 +114,7 @@ export class HomeComponent implements OnInit {
       for (const file of this.selectedFiles) {
         formData.append('files', file, file.name);
       }
-      formData.append('dir_id', '0'); // Reemplaza '0' por el ID del directorio correcto
+      formData.append('dir_id', this.idDirectorioPadre.toString()); // Reemplaza '0' por el ID del directorio correcto
       const token = this.getCookie("token"); // Reemplaza 'TOKEN_VALUE' por tu token válido
       const headers = { 'token': token };
 
@@ -91,8 +133,35 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  crearCarpeta(){
+    const nombreDirectorio = prompt("Ingrese el nombre de la carpeta:");
+    if (nombreDirectorio) {
+      const newFolderDTO = {
+        idDirectorioPadre: this.idDirectorioPadre,
+        nombreDirectorio: nombreDirectorio
+      };
+      const token = this.getCookie("token"); // Reemplaza 'TOKEN_VALUE' por tu token válido
+      const headers = { 'token': token };
+
+      this.http.post('http://localhost:8080/api/file/new/folder', newFolderDTO, { headers })
+        .subscribe(
+          response => {
+            // Maneja la respuesta exitosa aquí
+            console.log('Carpeta creada exitosamente');
+            window.location.reload();
+          },
+          error => {
+            // Maneja los errores aquí
+            console.error('Error al crear carpeta:', error);
+          }
+        );
+    } else {
+      console.log('Se requiere un nombre de carpeta válido.');
+    }
+  }
+
   renameFile(file: any) {
-    const newFileName = prompt('Ingrese el nuevo nombre de archivo', file.nombreArchivo);
+    const newFileName = prompt('Ingrese el nuevo nombre de archivo', this.obtenerNombreArchivoSinExtension(file.nombreArchivo));
     if (newFileName && newFileName.trim() !== '') {
       const token = this.getCookie('token');
       const headers = new HttpHeaders().set('token', token);
@@ -112,6 +181,15 @@ export class HomeComponent implements OnInit {
         );
     }
   }
+
+  obtenerNombreArchivoSinExtension(nombreArchivo: string): string {
+    const extensionIndex = nombreArchivo.lastIndexOf('.');
+    if (extensionIndex !== -1) {
+      return nombreArchivo.substring(0, extensionIndex);
+    }
+    return nombreArchivo;
+  }
+
 
   deleteFile(file: any) {
     const confirmation = confirm('¿Está seguro de que desea borrar este archivo?');
@@ -146,6 +224,7 @@ export class HomeComponent implements OnInit {
           (response: ArchivoDTO[]) => {
             // Manejar la respuesta exitosa aquí
             this.files = response;
+            this.idDirectorioPadre = file.idArchivo
           },
           (error) => {
             // Manejar el error aquí
@@ -214,3 +293,10 @@ interface ArchivoDTO {
   nombreArchivo: string;
   folder: boolean;
 }
+
+interface DescargaDTO {
+  id: number;
+  nombre: string;
+  base64Bytes: string;
+}
+
